@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Grading System</title>
+
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            font-family: Arial;
+            overflow: hidden;
+        }
+
+        /* Background Image */
+        #bgImage {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            transition: opacity 1s;
+        }
+
+        /* Center layout */
+        .container {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Card */
+        .card {
+            background: rgba(255,255,255,0.9);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            width: 350px;
+            box-shadow: 0 0 15px black;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        input, select {
+            padding: 10px;
+            margin: 8px;
+            width: 90%;
+            font-size: 15px;
+            border-radius: 5px;
+            border: 1px solid gray;
+        }
+
+        /* 🔥 Remove arrows from number input */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: linear-gradient(to right, green, darkgreen);
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: darkgreen;
+        }
+
+        #result {
+            margin-top: 15px;
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .pass { color: green; }
+        .fail { color: red; }
+    </style>
+</head>
+
+<body>
+
+<img id="bgImage" src="image.jpg">
+
+<div class="container">
+<div class="card">
+
+<h2>Student Grading System</h2>
+
+<!-- Student Details -->
+<input type="text" id="name" placeholder="Student Name">
+<input type="text" id="reg" placeholder="Register Number">
+
+<select id="dept">
+    <option value="">Select Department</option>
+    <option>CSE</option>
+    <option>IT</option>
+    <option>ECE</option>
+</select>
+
+<!-- 🔥 Changed phone to TEXT -->
+<input type="text" id="phone" placeholder="Phone Number">
+
+<!-- Marks -->
+<input type="number" id="m1" placeholder="Maths Marks">
+<input type="number" id="m2" placeholder="Science Marks">
+<input type="number" id="m3" placeholder="English Marks">
+
+<button onclick="calculate()">Calculate Result</button>
+
+<div id="result"></div>
+
+</div>
+</div>
+
+<script>
+
+// Background Images
+let images = ["image.jpg","ima.jpg","image1.jpg","image2.jpg"];
+let index = 0;
+
+// 🔥 Change every 4 seconds
+setInterval(changeImage, 4000);
+
+function changeImage(){
+    let img = document.getElementById("bgImage");
+
+    img.style.opacity = 0;
+
+    setTimeout(()=>{
+        index = (index + 1) % images.length;
+        img.src = images[index];
+        img.style.opacity = 1;
+    },500);
+}
+
+
+// Grade Calculation
+function calculate(){
+
+    let name = document.getElementById("name").value;
+    let reg = document.getElementById("reg").value;
+    let dept = document.getElementById("dept").value;
+    let phone = document.getElementById("phone").value;
+
+    let m1 = Number(document.getElementById("m1").value);
+    let m2 = Number(document.getElementById("m2").value);
+    let m3 = Number(document.getElementById("m3").value);
+
+    if(name=="" || reg=="" || dept=="" || phone==""){
+        alert("Fill all student details");
+        return;
+    }
+
+    if(m1<0 || m2<0 || m3<0 || m1>100 || m2>100 || m3>100){
+        alert("Enter valid marks (0-100)");
+        return;
+    }
+
+    let total = m1 + m2 + m3;
+    let avg = total / 3;
+
+    let grade="", status="", remark="", color="";
+
+    if(avg >= 90){ grade="A+"; remark="Excellent"; }
+    else if(avg >= 80){ grade="A"; remark="Very Good"; }
+    else if(avg >= 70){ grade="B"; remark="Good"; }
+    else if(avg >= 60){ grade="C"; remark="Average"; }
+    else if(avg >= 50){ grade="D"; remark="Need Improvement"; }
+    else { grade="F"; remark="Fail"; }
+
+    if(m1>=50 && m2>=50 && m3>=50){
+        status="PASS";
+        color="pass";
+    } else {
+        status="FAIL";
+        color="fail";
+    }
+
+    document.getElementById("result").innerHTML = `
+        Name: ${name} <br>
+        Reg No: ${reg} <br>
+        Dept: ${dept} <br>
+        Phone: ${phone} <br><br>
+
+        Total: ${total} <br>
+        Average: ${avg.toFixed(2)} <br>
+        Grade: ${grade} <br>
+        <span class="${color}">Status: ${status}</span> <br>
+        Remark: ${remark}
+    `;
+}
+
+</script>
+
+</body>
+</html>
